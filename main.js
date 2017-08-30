@@ -1,7 +1,7 @@
 // minA: harvest, upgrade, repair, build, 5, 21, 58dbc41a8283ff5308a3e86a, 599edfd8a185177ec3d4ad02
 // minB: harvest, repair, 42, 11, 58dbc41a8283ff5308a3e868
-// carB: carry, 41, 11, 37, 13, 59a1fe362ad55b4b1432ab45
-// tmpA: dismantle, build, 59a0365562b5f6147e933927, 59a6439ae0ef6f26bff919a9, 599e4ae3838eeb669627a03b, 599e24d33c57a50e570525af
+// carB: carry, 41, 11, 59a1fe362ad55b4b1432ab45
+// tmpA: build, 37, 13, 37, 14, 38, 13
 
 // TODO: rm extra road
 // TODO: rmb move path ?
@@ -251,63 +251,39 @@ module.exports.loop = function () {
 	
 	//////////////////////////////
 	
-	if (true) {
-		var tmpAPart = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
-		var tmpASink = Game.getObjectById('59a0365562b5f6147e933927');
-		var tmpATarget = Game.getObjectById('59a6439ae0ef6f26bff919a9');
-		var tmpATargetsA = roomA.find(FIND_STRUCTURES, {filter: (s) => (s.id == '599e4ae3838eeb669627a03b' || s.id == '599e24d33c57a50e570525af')});
-		var tmpATargetsB = roomA.find(FIND_CONSTRUCTION_SITES, {filter: (s) => (s.pos.x > 20)});
-		
-		for (var i = 1; i <= 2; i++) {
-			var name = 'tmpA_' + i;
-			var creep = Game.creeps[name];
-			if (typeof creep == 'undefined') {
-				if (tmpATargetsA.length > 0 || tmpATargetsB.length > 0) {
-					if (typeof roomASpawnA.createCreep(tmpAPart, name) == 'string') {
-						console.log('Spawn:', name);
-					}
+	var tmpAPart = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+	var tmpALocA = [new RoomPosition(37, 13, roomAName), new RoomPosition(37, 14, roomAName)];
+	var tmpALocB = new RoomPosition(38, 13, roomAName);
+	var targets = roomA.lookForAt(LOOK_CONSTRUCTION_SITES, tmpALocB);
+	
+	for (var i = 0; i < 2; i++) {
+		var name = 'tmpA_' + i;
+		var creep = Game.creeps[name];
+		if (typeof creep == 'undefined') {
+			if (targets.length > 0)	 {
+				if (typeof roomASpawnA.createCreep(tmpAPart, name) == 'string') {
+					console.log('Spawn:', name);
 				}
-			} else {
-				if (tmpATarget !== null && creep.carry.energy < creep.carryCapacity && typeof creep.memory.building == 'undefined') {
-					creep.moveTo(tmpATarget, {visualizePathStyle: {opacity: .7}});
-					creep.pickup(tmpATarget);
-					continue;
-				}
-				if (tmpATargetsA.length > 0) {
-					if (creep.carry.energy == creep.carryCapacity) {
-						if (creep.transfer(tmpASink, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-							creep.moveTo(tmpASink, {visualizePathStyle: {opacity: .7}});
+			}
+		} else {
+			if (targets.length > 0)	 {
+				if (creep.pos.isEqualTo(tmpALocA[i])) {
+					if (creep.carry.energy == 0) {
+						var sources = tmpALocA[i].findInRange(FIND_DROPPED_RESOURCES, 1);
+						if (sources.length > 0) {
+							creep.pickup(sources[0]);
 						}
 					} else {
-						if (creep.dismantle(tmpATargetsA[0]) == ERR_NOT_IN_RANGE) {
-							creep.moveTo(tmpATargetsA[0], {visualizePathStyle: {opacity: .7}});
-						}
-					}
-				} else if (tmpATargetsB.length > 0) {
-					if (typeof creep.memory.building == 'undefined') {
-						if (creep.carry.energy == creep.carryCapacity) {
-							creep.memory.building = true;
-						}
-					} else {
-						if (creep.carry.energy == 0) {
-							delete creep.memory.building;
-						}
-					}
-					if (creep.memory.building) {
-						if (creep.build(tmpATargetsB[0]) == ERR_NOT_IN_RANGE) {
-							creep.moveTo(tmpATargetsB[0], {visualizePathStyle: {opacity: .7}});
-						}
-					} else {
-						if (creep.withdraw(tmpASink, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-							creep.moveTo(tmpASink, {visualizePathStyle: {opacity: .7}});
-						}
+						creep.build(targets[0]);
 					}
 				} else {
-					if (creep.pos.isEqualTo(roomAGraveLoc)) {
-						roomASpawnA.recycleCreep(creep);
-					} else {
-						creep.moveTo(roomAGraveLoc, {visualizePathStyle: {opacity: .7}});
-					}
+					creep.moveTo(tmpALocA[i], {visualizePathStyle: {opacity: .7}});
+				}
+			} else {
+				if (creep.pos.isEqualTo(roomAGraveLoc)) {
+					roomASpawnA.recycleCreep(creep);
+				} else {
+					creep.moveTo(roomAGraveLoc, {visualizePathStyle: {opacity: .7}});
 				}
 			}
 		}
