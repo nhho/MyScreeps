@@ -20,6 +20,7 @@ module.exports.loop = function () {
 	var roomA = Game.rooms[roomAName];
 	var roomASpawnA = Game.getObjectById('599cf27cc29e4d5b236724cf');
 	var roomAGraveLoc = new RoomPosition(40, 11, roomAName);
+	var roomATowers = [Game.getObjectById('59a671f4a06b59410e1add2f'), Game.getObjectById('59a6a78573262b03cd6403ae')];
 	
 	//////////////////////////////
 	
@@ -329,9 +330,8 @@ module.exports.loop = function () {
 	
 	//////////////////////////////
 	
-	towers = roomA.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-	for (var i = 0; i < towers.length; i++) {
-		var tower = towers[i];
+	for (var i = 0; i < roomATowers.length; i++) {
+		var tower = roomATowers[i];
 		var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
 		if (closestHostile !== null) {
 			tower.attack(closestHostile);
@@ -340,7 +340,7 @@ module.exports.loop = function () {
 			if (closestWounded !== null) {
 				tower.heal(closestWounded);
 			} else {
-				var targets = roomA.find(FIND_STRUCTURES, {filter: (s) => s.hits + 800 <= s.hitsMax && s.structureType != STRUCTURE_WALL});
+				var targets = roomA.find(FIND_STRUCTURES, {filter: (s) => s.hits + 800 <= s.hitsMax && s.structureType != STRUCTURE_WALL && (s.pos.x < 25) == (tower.pos.x < 25)});
 				var target = undefined;
 				for (var j = 0; j < targets.length; j++) {
 					if (!minALoc.inRangeTo(targets[j].pos, 3) && !minBLoc.inRangeTo(targets[j].pos, 3)) {
