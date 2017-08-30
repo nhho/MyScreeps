@@ -39,12 +39,13 @@ module.exports.loop = function () {
 			if (creep.spawning) {
 				ticksToLive = minAPreTime;
 			} else {
+				var creepWorkPart = creep.getActiveBodyparts(WORK);
 				if (creep.ticksToLive > ticksToLive) {
 					ticksToLive = creep.ticksToLive;
 				}
 				if (creep.pos.isEqualTo(minALoc)) {
 					var target = undefined;
-					if (creep.carry.energy >= creep.getActiveBodyparts(WORK)) {
+					if (creep.carry.energy >= creepWorkPart) {
 						var targets = minALoc.findInRange(FIND_STRUCTURES, 3, {filter: (s) => s.hits + 600 <= s.hitsMax && s.structureType != STRUCTURE_WALL});
 						for (var j = 0; j < targets.length; j++) {
 							if (typeof target == 'undefined' || targets[j].hits * target.hitsMax < target.hits * targets[j].hitsMax) {
@@ -53,7 +54,17 @@ module.exports.loop = function () {
 						}
 					}
 					if (typeof target == 'undefined') {
-						creep.harvest(minASource);
+						var build = false;
+						if (creep.carry.energy >= creepWorkPart * 5) {
+							var targets = minALoc.findInRange(FIND_CONSTRUCTION_SITES, 3);
+							if (targets.length > 0) {
+								creep.build(targets[0]);
+								build = true;
+							}
+						}
+						if (!build) {
+							creep.harvest(minASource);
+						}
 					} else {
 						creep.repair(target);
 					}
@@ -92,12 +103,13 @@ module.exports.loop = function () {
 			if (creep.spawning) {
 				ticksToLive = minBPreTime;
 			} else {
+				var creepWorkPart = creep.getActiveBodyparts(WORK);
 				if (creep.ticksToLive > ticksToLive) {
 					ticksToLive = creep.ticksToLive;
 				}
 				if (creep.pos.isEqualTo(minBLoc)) {
 					var target = undefined;
-					if (creep.carry.energy >= creep.getActiveBodyparts(WORK)) {
+					if (creep.carry.energy >= creepWorkPart) {
 						if (minBSink.ticksToDowngrade * 2 < CONTROLLER_DOWNGRADE[minBSink.level]) {
 							creep.upgradeController(minBSink);
 						} else {
