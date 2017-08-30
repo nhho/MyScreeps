@@ -46,7 +46,7 @@ module.exports.loop = function () {
 				if (creep.pos.isEqualTo(minALoc)) {
 					var target = undefined;
 					if (creep.carry.energy >= creepWorkPart) {
-						var targets = minALoc.findInRange(FIND_STRUCTURES, 3, {filter: (s) => s.hits + 600 <= s.hitsMax && s.structureType != STRUCTURE_WALL});
+						var targets = minALoc.findInRange(FIND_STRUCTURES, 3, {filter: (s) => s.hits + creepWorkPart * 100 <= s.hitsMax && s.structureType != STRUCTURE_WALL});
 						for (var j = 0; j < targets.length; j++) {
 							if (typeof target == 'undefined' || targets[j].hits * target.hitsMax < target.hits * targets[j].hitsMax) {
 								target = targets[j];
@@ -113,7 +113,7 @@ module.exports.loop = function () {
 						if (minBSink.ticksToDowngrade * 2 < CONTROLLER_DOWNGRADE[minBSink.level]) {
 							creep.upgradeController(minBSink);
 						} else {
-							var targets = minBLoc.findInRange(FIND_STRUCTURES, 3, {filter: (s) => s.hits + 600 <= s.hitsMax && s.structureType != STRUCTURE_WALL});
+							var targets = minBLoc.findInRange(FIND_STRUCTURES, 3, {filter: (s) => s.hits + creepWorkPart * 100 <= s.hitsMax && s.structureType != STRUCTURE_WALL});
 							for (var j = 0; j < targets.length; j++) {
 								if (typeof target == 'undefined' || targets[j].hits * target.hitsMax < target.hits * targets[j].hitsMax) {
 									target = targets[j];
