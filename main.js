@@ -2,9 +2,6 @@
 // minB: harvest, repair, 42, 11, 58dbc41a8283ff5308a3e868
 // carA: carry, 5, 22, 35, 13, 599edfd8a185177ec3d4ad02, 59a0365562b5f6147e933927
 // carB: carry, 41, 11, 37, 13, 59a1fe362ad55b4b1432ab45, 59a0365562b5f6147e933927
-// carC: carry, 37, 14, 38, 14, 59a0365562b5f6147e933927
-// carD: carry, 38, 14, 39, 13, 39, 14
-// upA: upgrade, 39, 13, 39, 14
 // tmpA: dismantle, build, 59a0365562b5f6147e933927, 59a6439ae0ef6f26bff919a9, 599e4ae3838eeb669627a03b, 599e24d33c57a50e570525af
 
 // TODO: rm extra road
@@ -268,174 +265,49 @@ module.exports.loop = function () {
 	
 	//////////////////////////////
 	
-	var carCPart = [CARRY, MOVE]; // <= 300
-	var carCLocA = new RoomPosition(37, 14, roomAName);
-	var carCLocB = new RoomPosition(38, 14, roomAName);
-	var carCSource = Game.getObjectById('59a0365562b5f6147e933927');
-	// console.log(roomASpawnA.pos.findPathTo(carCLocA, {ignoreCreeps: true}).length + carCPart.length * 3); // 8
-	var carCPreTime = 8;
-	
-	var ticksToLive = 0;
 	for (var i = 1; i <= 2; i++) {
 		var name = 'carC_' + i;
 		var creep = Game.creeps[name];
 		if (typeof creep != 'undefined') {
-			if (creep.spawning) {
-				ticksToLive = carCPreTime;
-			} else {
-				if (creep.ticksToLive > ticksToLive) {
-					ticksToLive = creep.ticksToLive;
-				}
-				if (creep.pos.isEqualTo(carCLocA)) {
-					var pickup = false;
-					if (creep.carry.energy < creep.carryCapacity) {
-						var targets = carCLocA.findInRange(FIND_DROPPED_RESOURCES, 1);
-						if (targets.length > 0) {
-							creep.pickup(targets[0]);
-							pickup = true;
-						}
-					}
-					if (!pickup) {
-						if (creep.carry.energy == 0) {
-							creep.withdraw(carCSource, RESOURCE_ENERGY);
-						} else {
-							var target = undefined;
-							for (var j = 1; j <= 2; j++) {
-								var preTargetName = 'carD_' + j;
-								var preTarget = Game.creeps[preTargetName];
-								if (typeof preTarget != 'undefined' && preTarget.pos.isEqualTo(carCLocB) && preTarget.carry.energy < preTarget.carryCapacity) {
-									target = preTarget;
-									break;
-								}
-							}
-							if (typeof target == 'undefined') {
-								if (creep.carry.energy < creep.carryCapacity) {
-									creep.withdraw(carCSource, RESOURCE_ENERGY);
-								}
-							} else {
-								creep.transfer(target, RESOURCE_ENERGY);
-							}
-						}
-					}
+			if (!creep.spawning) {
+				if (creep.pos.isEqualTo(roomAGraveLoc)) {
+					roomASpawnA.recycleCreep(creep);
 				} else {
-					creep.moveTo(carCLocA, {visualizePathStyle: {opacity: .7}});
+					creep.moveTo(roomAGraveLoc, {visualizePathStyle: {opacity: .7}});
 				}
-			}
-		}
-	}
-	if (ticksToLive < carCPreTime) {
-		for (var i = 1; i <= 2; i++) {
-			var name = 'carC_' + i;
-			if (typeof Game.creeps[name] == 'undefined') {
-				if (typeof roomASpawnA.createCreep(carCPart, name) == 'string') {
-					console.log('Spawn:', name);
-				}
-				break;
 			}
 		}
 	}
 	
 	//////////////////////////////
 	
-	var carDPart = [CARRY, MOVE]; // <= 300
-	var carDLocA = new RoomPosition(38, 14, roomAName);
-	var carDLocB = [new RoomPosition(39, 13, roomAName), new RoomPosition(39, 14, roomAName)];
-	// console.log(roomASpawnA.pos.findPathTo(carDLocA, {ignoreCreeps: true}).length + carDPart.length * 3); // 8
-	var carDPreTime = 8;
-	
-	var ticksToLive = 0;
 	for (var i = 1; i <= 2; i++) {
 		var name = 'carD_' + i;
 		var creep = Game.creeps[name];
 		if (typeof creep != 'undefined') {
-			if (creep.spawning) {
-				ticksToLive = carDPreTime;
-			} else {
-				if (creep.ticksToLive > ticksToLive) {
-					ticksToLive = creep.ticksToLive;
-				}
-				if (creep.pos.isEqualTo(carDLocA)) {
-					var pickup = false;
-					if (creep.carry.energy < creep.carryCapacity) {
-						var targets = carDLocA.findInRange(FIND_DROPPED_RESOURCES, 1);
-						if (targets.length > 0) {
-							creep.pickup(targets[0]);
-							pickup = true;
-						}
-					}
-					if (!pickup && creep.carry.energy > 0) {
-						var target = undefined;
-						for (var jj = 0; jj < 2; jj++) {
-							for (var j = 1; j <= 2; j++) {
-								var preTargetName = 'upA' + jj + '_' + j;
-								var preTarget = Game.creeps[preTargetName];
-								if (typeof preTarget != 'undefined' && preTarget.pos.isEqualTo(carDLocB[jj]) && preTarget.carry.energy < preTarget.carryCapacity) {
-									if (typeof target == 'undefined' || preTarget.carry.energy < target.carry.energy) {
-										target = preTarget;
-									}
-									break;
-								}
-							}
-						}
-						if (typeof target != 'undefined') {
-							creep.transfer(target, RESOURCE_ENERGY);
-						}
-					}
+			if (!creep.spawning) {
+				if (creep.pos.isEqualTo(roomAGraveLoc)) {
+					roomASpawnA.recycleCreep(creep);
 				} else {
-					creep.moveTo(carDLocA, {visualizePathStyle: {opacity: .7}});
+					creep.moveTo(roomAGraveLoc, {visualizePathStyle: {opacity: .7}});
 				}
-			}
-		}
-	}
-	if (ticksToLive < carDPreTime) {
-		for (var i = 1; i <= 2; i++) {
-			var name = 'carD_' + i;
-			if (typeof Game.creeps[name] == 'undefined') {
-				if (typeof roomASpawnA.createCreep(carDPart, name) == 'string') {
-					console.log('Spawn:', name);
-				}
-				break;
 			}
 		}
 	}
 	
 	//////////////////////////////
 	
-	var upAPart = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE];
-	var upALoc = [new RoomPosition(39, 13, roomAName), new RoomPosition(39, 14, roomAName)];
-	var upASink = roomA.controller;
-	// console.log(roomASpawnA.pos.findPathTo(upALoc[0], {ignoreCreeps: true}).length * 3 + upAPart.length * 3); // 42
-	// console.log(roomASpawnA.pos.findPathTo(upALoc[1], {ignoreCreeps: true}).length * 3 + upAPart.length * 3); // 45
-	var upAPreTime = [42, 45];
-	
 	for (var ii = 0; ii < 2; ii++) {
-		var ticksToLive = 0;
 		for (var i = 1; i <= 2; i++) {
 			var name = 'upA' + ii + '_' + i;
 			var creep = Game.creeps[name];
 			if (typeof creep != 'undefined') {
-				if (creep.spawning) {
-					ticksToLive = upAPreTime[ii];
-				} else {
-					if (creep.ticksToLive > ticksToLive) {
-						ticksToLive = creep.ticksToLive;
-					}
-					if (creep.pos.isEqualTo(upALoc[ii])) {
-						creep.upgradeController(upASink);
+				if (!creep.spawning) {
+					if (creep.pos.isEqualTo(roomAGraveLoc)) {
+						roomASpawnA.recycleCreep(creep);
 					} else {
-						creep.moveTo(upALoc[ii], {visualizePathStyle: {opacity: .7}});
+						creep.moveTo(roomAGraveLoc, {visualizePathStyle: {opacity: .7}});
 					}
-				}
-			}
-		}
-		if (ticksToLive < upAPreTime[ii]) {
-			for (var i = 1; i <= 2; i++) {
-				var name = 'upA' + ii + '_' + i;
-				if (typeof Game.creeps[name] == 'undefined') {
-					if (typeof roomASpawnA.createCreep(upAPart, name) == 'string') {
-						console.log('Spawn:', name);
-					}
-					break;
 				}
 			}
 		}
