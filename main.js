@@ -21,7 +21,8 @@ module.exports.loop = function () {
 	
 	var roomAName = 'W15S98';
 	var roomA = Game.rooms[roomAName];
-	var roomASpawnA = Game.getObjectById('599cf27cc29e4d5b236724cf')
+	var roomASpawnA = Game.getObjectById('599cf27cc29e4d5b236724cf');
+	var roomAGraveLoc = new RoomPosition(40, 11, roomAName);
 	
 	//////////////////////////////
 	
@@ -444,7 +445,6 @@ module.exports.loop = function () {
 	
 	if (true) {
 		var tmpAPart = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
-		var tmpALoc = new RoomPosition(40, 11, roomAName);
 		var tmpASink = Game.getObjectById('59a0365562b5f6147e933927');
 		var tmpATarget = Game.getObjectById('59a6439ae0ef6f26bff919a9');
 		var tmpATargetsA = roomA.find(FIND_STRUCTURES, {filter: (s) => (s.id == '599e4ae3838eeb669627a03b' || s.id == '599e24d33c57a50e570525af')});
@@ -495,10 +495,10 @@ module.exports.loop = function () {
 						}
 					}
 				} else {
-					if (creep.pos.isEqualTo(tmpALoc)) {
+					if (creep.pos.isEqualTo(roomAGraveLoc)) {
 						roomASpawnA.recycleCreep(creep);
 					} else {
-						creep.moveTo(tmpALoc, {visualizePathStyle: {opacity: .7}});
+						creep.moveTo(roomAGraveLoc, {visualizePathStyle: {opacity: .7}});
 					}
 				}
 			}
