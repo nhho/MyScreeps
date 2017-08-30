@@ -291,6 +291,15 @@ module.exports.loop = function () {
 	
 	//////////////////////////////
 	
+	var tmpBPart = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE];
+	var tmpBLocA = [new RoomPosition(37, 13, roomAName), new RoomPosition(37, 14, roomAName)];
+	var tmpBLocB = new RoomPosition(38, 13, roomAName);
+	var targets = roomA.lookForAt(LOOK_STRUCTURES, tmpBLocB);
+	
+	console.log(targets.length);
+	
+	//////////////////////////////
+	
 	for (var i = 0; i < roomATowers.length; i++) {
 		var tower = roomATowers[i];
 		var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
