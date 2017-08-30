@@ -152,7 +152,7 @@ module.exports.loop = function () {
 	// console.log(carALocA.findPathTo(carALocB, {ignoreCreeps: true}).length + 5); // 54
 	var carATravelTime = 54;
 	
-	for (var i = 1; i <= 2; i++) {
+	for (var i = 2; i <= 2; i++) {
 		var name = 'carA_' + i;
 		var creep = Game.creeps[name];
 		if (typeof creep == 'undefined') {
