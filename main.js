@@ -1,6 +1,6 @@
 // minA: harvest, upgrade, repair, build, 5, 21, 58dbc41a8283ff5308a3e86a, 599edfd8a185177ec3d4ad02
 // minB: harvest, repair, 42, 11, 58dbc41a8283ff5308a3e868
-// carB: carry, 41, 11, 37, 13, 59a1fe362ad55b4b1432ab45, 59a0365562b5f6147e933927
+// carB: carry, 41, 11, 37, 13, 59a1fe362ad55b4b1432ab45
 // tmpA: dismantle, build, 59a0365562b5f6147e933927, 59a6439ae0ef6f26bff919a9, 599e4ae3838eeb669627a03b, 599e24d33c57a50e570525af
 
 // TODO: rm extra road
@@ -173,9 +173,9 @@ module.exports.loop = function () {
 	
 	var carBPart = [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE]; // <= 300
 	var carBLocA = new RoomPosition(41, 11, roomAName);
-	var carBLocB = new RoomPosition(37, 13, roomAName);
+	// var carBLocB = new RoomPosition(37, 13, roomAName);
 	var carBSource = Game.getObjectById('59a1fe362ad55b4b1432ab45');
-	var carBSink = Game.getObjectById('59a0365562b5f6147e933927');
+	// var carBSink = Game.getObjectById('59a0365562b5f6147e933927');
 	var carBTravelTime = 20;
 	
 	// for (var i = 1; i <= 1; i++) {
@@ -216,11 +216,14 @@ module.exports.loop = function () {
 						}
 					}
 					if (typeof creep.memory.target == 'undefined') {
+						/*
 						if (creep.pos.isEqualTo(carBLocB)) {
 							creep.transfer(carBSink, RESOURCE_ENERGY);
 						} else {
 							creep.moveTo(carBLocB, {visualizePathStyle: {opacity: .7}});
 						}
+						*/
+						creep.moveTo(carBLocA, {visualizePathStyle: {opacity: .7}});
 					} else {
 						var target = Game.getObjectById(creep.memory.target);
 						var ret = creep.transfer(target, RESOURCE_ENERGY);
