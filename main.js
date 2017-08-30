@@ -502,18 +502,23 @@ module.exports.loop = function () {
 		if (closestHostile !== null) {
 			tower.attack(closestHostile);
 		} else {
-			var targets = roomA.find(FIND_STRUCTURES, {filter: (s) => s.hits + 800 <= s.hitsMax && s.structureType != STRUCTURE_WALL});
-			var target = undefined;
-			for (var j = 0; j < targets.length; j++) {
-				if (!minALoc.inRangeTo(targets[j].pos, 3) && !minBLoc.inRangeTo(targets[j].pos, 3)) {
-					// new RoomVisual(roomAName).circle(targets[j].pos.x, targets[j].pos.y);
-					if (typeof target == 'undefined' || targets[j].hits * target.hitsMax < target.hits * targets[j].hitsMax) {
-						target = targets[j];
+			var closestWounded = tower.pos.findClosestByRange(FIND_MY_CREEPS, {filter: (s) => s.hits < s.hitsMax});
+			if (closestWounded !== null) {
+				tower.heal(closestWounded);
+			} else {
+				var targets = roomA.find(FIND_STRUCTURES, {filter: (s) => s.hits + 800 <= s.hitsMax && s.structureType != STRUCTURE_WALL});
+				var target = undefined;
+				for (var j = 0; j < targets.length; j++) {
+					if (!minALoc.inRangeTo(targets[j].pos, 3) && !minBLoc.inRangeTo(targets[j].pos, 3)) {
+						// new RoomVisual(roomAName).circle(targets[j].pos.x, targets[j].pos.y);
+						if (typeof target == 'undefined' || targets[j].hits * target.hitsMax < target.hits * targets[j].hitsMax) {
+							target = targets[j];
+						}
 					}
 				}
-			}
-			if (typeof target != 'undefined') {
-				tower.repair(target);
+				if (typeof target != 'undefined') {
+					tower.repair(target);
+				}
 			}
 		}
 	}
