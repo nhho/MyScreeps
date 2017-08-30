@@ -220,7 +220,7 @@ module.exports.loop = function () {
 				}
 				if (creep.memory.transferring === true) {
 					if (typeof creep.memory.target == 'undefined') {
-						var targets = roomA.find(FIND_STRUCTURES, {filter: (s) => (s.structureType == STRUCTURE_TOWER && s.energy + creep.carry.energy <= s.energyCapacity) || ((s.structureType == STRUCTURE_EXTENSION || s.structureType == STRUCTURE_SPAWN) && s.energy < s.energyCapacity)});
+						var targets = roomA.find(FIND_STRUCTURES, {filter: (s) => (s.structureType == STRUCTURE_TOWER && s.energy + creep.carry.energy <= s.energyCapacity && s.pos.x >= 35) || ((s.structureType == STRUCTURE_EXTENSION || s.structureType == STRUCTURE_SPAWN) && s.energy < s.energyCapacity)});
 						var bestPenalty;
 						for (var j = 0; j < targets.length; j++) {
 							var penalty = Math.max(Math.abs(creep.pos.x - targets[j].pos.x), Math.abs(creep.pos.y - targets[j].pos.y));
