@@ -341,7 +341,7 @@ module.exports.loop = function () {
 	
 	//////////////////////////////
 	
-	if (roomALink[1].energy == roomALink[1].energyCapacity && roomALink[0].energy == 0) {
+	if (roomALink[1].energy == roomALink[1].energyCapacity && roomALink[0].energy + roomALink[1].energy * 0.97 <= roomALink[0].energyCapacity) {
 		roomALink[1].transferEnergy(roomALink[0]);
 	}
 	
