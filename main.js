@@ -265,56 +265,6 @@ module.exports.loop = function () {
 	
 	//////////////////////////////
 	
-	for (var i = 1; i <= 2; i++) {
-		var name = 'carC_' + i;
-		var creep = Game.creeps[name];
-		if (typeof creep != 'undefined') {
-			if (!creep.spawning) {
-				if (creep.pos.isEqualTo(roomAGraveLoc)) {
-					roomASpawnA.recycleCreep(creep);
-				} else {
-					creep.moveTo(roomAGraveLoc, {visualizePathStyle: {opacity: .7}});
-				}
-			}
-		}
-	}
-	
-	//////////////////////////////
-	
-	for (var i = 1; i <= 2; i++) {
-		var name = 'carD_' + i;
-		var creep = Game.creeps[name];
-		if (typeof creep != 'undefined') {
-			if (!creep.spawning) {
-				if (creep.pos.isEqualTo(roomAGraveLoc)) {
-					roomASpawnA.recycleCreep(creep);
-				} else {
-					creep.moveTo(roomAGraveLoc, {visualizePathStyle: {opacity: .7}});
-				}
-			}
-		}
-	}
-	
-	//////////////////////////////
-	
-	for (var ii = 0; ii < 2; ii++) {
-		for (var i = 1; i <= 2; i++) {
-			var name = 'upA' + ii + '_' + i;
-			var creep = Game.creeps[name];
-			if (typeof creep != 'undefined') {
-				if (!creep.spawning) {
-					if (creep.pos.isEqualTo(roomAGraveLoc)) {
-						roomASpawnA.recycleCreep(creep);
-					} else {
-						creep.moveTo(roomAGraveLoc, {visualizePathStyle: {opacity: .7}});
-					}
-				}
-			}
-		}
-	}
-	
-	//////////////////////////////
-	
 	if (true) {
 		var tmpAPart = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
 		var tmpASink = Game.getObjectById('59a0365562b5f6147e933927');
