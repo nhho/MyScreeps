@@ -1,6 +1,5 @@
 // minA: harvest, upgrade, repair, build, 5, 21, 58dbc41a8283ff5308a3e86a, 599edfd8a185177ec3d4ad02
 // minB: harvest, repair, 42, 11, 58dbc41a8283ff5308a3e868
-// carA: carry, 5, 22, 35, 13, 599edfd8a185177ec3d4ad02, 59a0365562b5f6147e933927
 // carB: carry, 41, 11, 37, 13, 59a1fe362ad55b4b1432ab45, 59a0365562b5f6147e933927
 // tmpA: dismantle, build, 59a0365562b5f6147e933927, 59a6439ae0ef6f26bff919a9, 599e4ae3838eeb669627a03b, 599e24d33c57a50e570525af
 
@@ -166,50 +165,6 @@ module.exports.loop = function () {
 					console.log('Spawn:', name);
 				}
 				break;
-			}
-		}
-	}
-	
-	//////////////////////////////
-	
-	var carAPart = [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-	var carALocA = new RoomPosition(5, 22, roomAName);
-	var carALocB = new RoomPosition(35, 13, roomAName);
-	var carASource = Game.getObjectById('599edfd8a185177ec3d4ad02');
-	var carASink = Game.getObjectById('59a0365562b5f6147e933927');
-	// console.log(carALocA.findPathTo(carALocB, {ignoreCreeps: true}).length + 5); // 54
-	var carATravelTime = 54;
-	
-	for (var i = 2; i <= 2; i++) {
-		var name = 'carA_' + i;
-		var creep = Game.creeps[name];
-		if (typeof creep == 'undefined') {
-			if (typeof roomASpawnA.createCreep(carAPart, name) == 'string') {
-				console.log('Spawn:', name);
-			}
-		} else if (!creep.spawning) {
-			if (creep.pos.isEqualTo(carALocA) && creep.ticksToLive < carATravelTime) {
-				creep.transfer(carASource, RESOURCE_ENERGY);
-				creep.suicide();
-			} else {
-				if (creep.carry.energy == creep.carryCapacity) {
-					if (creep.pos.isEqualTo(carALocB)) {
-						creep.transfer(carASink, RESOURCE_ENERGY);
-					} else {
-						creep.moveTo(carALocB, {visualizePathStyle: {opacity: .7}});
-					}
-				} else {
-					if (creep.pos.isEqualTo(carALocA)) {
-						var targets = carALocA.findInRange(FIND_DROPPED_RESOURCES, 1);
-						if (targets.length > 0) {
-							creep.pickup(targets[0]);
-						} else {
-							creep.withdraw(carASource, RESOURCE_ENERGY);
-						}
-					} else {
-						creep.moveTo(carALocA, {visualizePathStyle: {opacity: .7}});
-					}
-				}
 			}
 		}
 	}
