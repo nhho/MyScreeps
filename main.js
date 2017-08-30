@@ -5,7 +5,7 @@
 // carC: carry, 37, 14, 38, 14, 59a0365562b5f6147e933927
 // carD: carry, 38, 14, 39, 13, 39, 14
 // upA: upgrade, 39, 13, 39, 14
-// tmpA: dismantle, build, 40, 11, 59a0365562b5f6147e933927, 59a44514e97a7a215b6e1642, 599e4ae3838eeb669627a03b, 599e24d33c57a50e570525af
+// tmpA: dismantle, build, 40, 11, 59a0365562b5f6147e933927, 59a6439ae0ef6f26bff919a9, 599e4ae3838eeb669627a03b, 599e24d33c57a50e570525af
 
 // TODO: rm extra road
 // TODO: rmb move path ?
@@ -442,13 +442,13 @@ module.exports.loop = function () {
 	
 	//////////////////////////////
 	
-	if (false) {	
+	if (true) {
 		var tmpAPart = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
 		var tmpALoc = new RoomPosition(40, 11, roomAName);
 		var tmpASink = Game.getObjectById('59a0365562b5f6147e933927');
-		var tmpATarget = Game.getObjectById('59a44514e97a7a215b6e1642');
+		var tmpATarget = Game.getObjectById('59a6439ae0ef6f26bff919a9');
 		var tmpATargetsA = roomA.find(FIND_STRUCTURES, {filter: (s) => (s.id == '599e4ae3838eeb669627a03b' || s.id == '599e24d33c57a50e570525af')});
-		var tmpATargetsB = roomA.find(FIND_CONSTRUCTION_SITES);
+		var tmpATargetsB = roomA.find(FIND_CONSTRUCTION_SITES, {filter: (s) => (s.pos.x > 20)});
 		
 		for (var i = 1; i <= 2; i++) {
 			var name = 'tmpA_' + i;
