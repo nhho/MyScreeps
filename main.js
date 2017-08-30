@@ -340,6 +340,12 @@ module.exports.loop = function () {
 	}
 	
 	//////////////////////////////
+	
+	if (roomALink[1].energy == roomALink[1].energyCapacity && roomALink[0].energy == 0) {
+		roomALink[1].transferEnergy(roomALink[0]);
+	}
+	
+	//////////////////////////////
 		
 	var line = 0, cnt = 0;
 	for (var name in Game.creeps) {
