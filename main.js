@@ -44,7 +44,7 @@ module.exports.loop = function () {
 				}
 				if (creep.pos.isEqualTo(minALoc)) {
 					var target = undefined;
-					if (creep.carry.energy > 0) {
+					if (creep.carry.energy >= creep.getActiveBodyparts(WORK)) {
 						var targets = minALoc.findInRange(FIND_STRUCTURES, 3, {filter: (s) => s.hits + 600 <= s.hitsMax && s.structureType != STRUCTURE_WALL});
 						for (var j = 0; j < targets.length; j++) {
 							if (typeof target == 'undefined' || targets[j].hits * target.hitsMax < target.hits * targets[j].hitsMax) {
@@ -97,7 +97,7 @@ module.exports.loop = function () {
 				}
 				if (creep.pos.isEqualTo(minBLoc)) {
 					var target = undefined;
-					if (creep.carry.energy > 0) {
+					if (creep.carry.energy >= creep.getActiveBodyparts(WORK)) {
 						if (minBSink.ticksToDowngrade * 2 < CONTROLLER_DOWNGRADE[minBSink.level]) {
 							creep.upgradeController(minBSink);
 						} else {
