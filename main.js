@@ -5,7 +5,7 @@
 // carC: carry, 37, 14, 38, 14, 59a0365562b5f6147e933927
 // carD: carry, 38, 14, 39, 13, 39, 14
 // upA: upgrade, 39, 13, 39, 14
-// tmpA: dismantle, build, 40, 11, 59a0365562b5f6147e933927, 59a6439ae0ef6f26bff919a9, 599e4ae3838eeb669627a03b, 599e24d33c57a50e570525af
+// tmpA: dismantle, build, 59a0365562b5f6147e933927, 59a6439ae0ef6f26bff919a9, 599e4ae3838eeb669627a03b, 599e24d33c57a50e570525af
 
 // TODO: rm extra road
 // TODO: rmb move path ?
