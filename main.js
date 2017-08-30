@@ -1,4 +1,4 @@
-// minA: harvest, upgrade, repair, 5, 21, 58dbc41a8283ff5308a3e86a
+// minA: harvest, upgrade, repair, build, 5, 21, 58dbc41a8283ff5308a3e86a, 599edfd8a185177ec3d4ad02
 // minB: harvest, repair, 42, 11, 58dbc41a8283ff5308a3e868
 // carA: carry, 5, 22, 35, 13, 599edfd8a185177ec3d4ad02, 59a0365562b5f6147e933927
 // carB: carry, 41, 11, 37, 13, 59a1fe362ad55b4b1432ab45, 59a0365562b5f6147e933927
@@ -21,16 +21,18 @@ module.exports.loop = function () {
 	var roomASpawnA = Game.getObjectById('599cf27cc29e4d5b236724cf');
 	var roomAGraveLoc = new RoomPosition(40, 11, roomAName);
 	var roomATowers = [Game.getObjectById('59a671f4a06b59410e1add2f'), Game.getObjectById('59a6a78573262b03cd6403ae')];
+	var roomALink = [Game.getObjectById('59a697fe534852116064a5e1'), Game.getObjectById('59a648f455f98d733d6c11bd')];
 	
 	//////////////////////////////
 	
 	var minAPart = [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE];
 	var minALoc = new RoomPosition(5, 21, roomAName);
 	var minASource = Game.getObjectById('58dbc41a8283ff5308a3e86a');
+	var minAStorage = Game.getObjectById('599edfd8a185177ec3d4ad02');
 	// console.log(roomASpawnA.pos.findPathTo(minALoc, {ignoreCreeps: true}).length + minAPart.length * 3); // 84
 	var minAPreTime = 84;
 	
-	var ticksToLive = 0;	
+	var ticksToLive = 0;
 	for (var i = 1; i <= 2; i++) {
 		var name = 'minA_' + i;
 		var creep = Game.creeps[name];
@@ -62,7 +64,32 @@ module.exports.loop = function () {
 							}
 						}
 						if (!build) {
-							creep.harvest(minASource);
+							var take = false;
+							if (creep.carry.energy == 0 && roomALink[1].energy < roomALink[1].energyCapacity) {
+								var targets = minALoc.findInRange(FIND_DROPPED_RESOURCES, 1);
+								if (targets.length > 0) {
+									creep.pickup(targets[0]);
+									take = true;
+								} else if (minAStorage.store.energy > 0) {
+									creep.withdraw(minAStorage, RESOURCE_ENERGY);
+									take = true;
+								}
+							}
+							if (!take) {
+								var transfer = false;
+								if (creep.carry.energy + creepWorkPart * 2 > creep.carryCapacity || minASource.energy == 0) {
+									if (roomATowers[1].energy + creep.carry.energy <= roomATowers[1].energyCapacity) {
+										creep.transfer(roomATowers[1], RESOURCE_ENERGY);
+										transfer = true;
+									} else if (roomALink[1].energy < roomALink[1].energyCapacity) {
+										creep.transfer(roomALink[1], RESOURCE_ENERGY);
+										transfer = true;
+									}
+								}
+								if (!transfer) {
+									creep.harvest(minASource);
+								}
+							}
 						}
 					} else {
 						creep.repair(target);
